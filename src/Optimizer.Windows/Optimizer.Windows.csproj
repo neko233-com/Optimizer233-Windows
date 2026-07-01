@@ -4,6 +4,9 @@
     <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.22000.0</TargetPlatformMinVersion>
     <RootNamespace>Optimizer_Windows</RootNamespace>
+    <AssemblyName>Optimizer233.Windows</AssemblyName>
+    <Product>Optimizer233-Windows</Product>
+    <Title>Optimizer233-Windows</Title>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>x86;x64;ARM64</Platforms>
     <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture.ToString().ToLowerInvariant())</RuntimeIdentifier>

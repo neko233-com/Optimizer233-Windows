@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:Optimizer_Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Optimizer Windows"
+    Title="Optimizer233-Windows"
     mc:Ignorable="d">
     <Window.SystemBackdrop>
         <MicaBackdrop />
@@ -20,7 +20,7 @@
 
         <TitleBar
             x:Name="AppTitleBar"
-            Title="Optimizer Windows"
+            Title="Optimizer233-Windows"
             BackRequested="TitleBar_BackRequested"
             IsBackButtonVisible="{x:Bind NavFrame.CanGoBack, Mode=OneWay}"
             IsPaneToggleButtonVisible="True"
@@ -33,6 +33,7 @@
         <NavigationView
             x:Name="NavView"
             Grid.Row="1"
+            Background="{StaticResource ShellSurfaceBrush}"
             IsBackButtonVisible="Collapsed"
             IsPaneToggleButtonVisible="False"
             SelectionChanged="NavView_SelectionChanged">

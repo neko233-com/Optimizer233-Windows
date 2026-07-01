@@ -10,110 +10,129 @@
     Loaded="Page_Loaded"
     mc:Ignorable="d">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Padding="24,20,24,32" Spacing="20">
-            <Grid ColumnSpacing="16">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+        <StackPanel Padding="24,20,24,32" Spacing="24">
+            <Border Background="{StaticResource ShellElevatedBrush}" BorderBrush="{StaticResource ShellAccentDimBrush}" BorderThickness="1" CornerRadius="10" Padding="24">
+                <Grid ColumnSpacing="18">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="300" />
+                    </Grid.ColumnDefinitions>
 
-                <StackPanel Spacing="6">
-                    <TextBlock x:Name="PageTitleText" Style="{StaticResource TitleTextBlockStyle}" Text="Hardware" />
-                    <TextBlock x:Name="PageSubtitleText" Opacity="0.78" Text="Live inventory from Windows device APIs and WMI." />
+                    <StackPanel Spacing="10">
+                        <Border Style="{StaticResource TechChipStyle}" HorizontalAlignment="Left">
+                            <TextBlock x:Name="HeroEyebrowText" FontFamily="Bahnschrift" Foreground="{StaticResource ShellAccentSecondaryBrush}" Text="HARDWARE MAP" />
+                        </Border>
+                        <TextBlock x:Name="PageTitleText" Style="{StaticResource TitleTextBlockStyle}" Text="Hardware" />
+                        <TextBlock x:Name="PageSubtitleText" Foreground="{StaticResource ShellTextMutedBrush}" Text="Live inventory from Windows device APIs and WMI." TextWrapping="Wrap" />
+                        <Button x:Name="RefreshButton" Click="RefreshButton_Click" Content="Refresh" Style="{StaticResource PrimaryActionButtonStyle}" HorizontalAlignment="Left" />
+                    </StackPanel>
+
+                    <Border Grid.Column="1" Style="{StaticResource SectionCardStyle}" Background="#0B0A0F">
+                        <StackPanel Spacing="12">
+                            <Grid ColumnSpacing="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="PanelTitleText" FontSize="18" FontFamily="Bahnschrift" FontWeight="SemiBold" Text="Scan Status" />
+                                <ProgressRing x:Name="LoadingRing" Width="24" Height="24" IsActive="False" />
+                            </Grid>
+                            <TextBlock x:Name="StatusText" Foreground="{StaticResource ShellTextMutedBrush}" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource SectionCardStyle}">
+                <StackPanel Spacing="14">
+                    <TextBlock x:Name="InventoryTitleText" FontSize="24" FontFamily="Bahnschrift" FontWeight="SemiBold" Text="Detailed Inventory" />
+
+                    <Expander x:Name="CpuExpander" Header="CPU" IsExpanded="True">
+                        <ListView ItemsSource="{x:Bind CpuItems, Mode=OneWay}" SelectionMode="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="models:DetailItem">
+                                    <Grid Padding="0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="220" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock FontFamily="Bahnschrift" FontWeight="SemiBold" Text="{x:Bind Label}" />
+                                        <TextBlock Grid.Column="1" Foreground="{StaticResource ShellTextMutedBrush}" Text="{x:Bind Value}" TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Expander>
+
+                    <Expander x:Name="GpuExpander" Header="GPU" IsExpanded="True">
+                        <ListView ItemsSource="{x:Bind GpuItems, Mode=OneWay}" SelectionMode="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="models:DetailItem">
+                                    <Grid Padding="0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="220" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock FontFamily="Bahnschrift" FontWeight="SemiBold" Text="{x:Bind Label}" />
+                                        <TextBlock Grid.Column="1" Foreground="{StaticResource ShellTextMutedBrush}" Text="{x:Bind Value}" TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Expander>
+
+                    <Expander x:Name="MemoryExpander" Header="Memory" IsExpanded="True">
+                        <ListView ItemsSource="{x:Bind MemoryItems, Mode=OneWay}" SelectionMode="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="models:DetailItem">
+                                    <Grid Padding="0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="220" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock FontFamily="Bahnschrift" FontWeight="SemiBold" Text="{x:Bind Label}" />
+                                        <TextBlock Grid.Column="1" Foreground="{StaticResource ShellTextMutedBrush}" Text="{x:Bind Value}" TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Expander>
+
+                    <Expander x:Name="StorageExpander" Header="Storage" IsExpanded="True">
+                        <ListView ItemsSource="{x:Bind StorageItems, Mode=OneWay}" SelectionMode="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="models:DetailItem">
+                                    <Grid Padding="0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="220" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock FontFamily="Bahnschrift" FontWeight="SemiBold" Text="{x:Bind Label}" />
+                                        <TextBlock Grid.Column="1" Foreground="{StaticResource ShellTextMutedBrush}" Text="{x:Bind Value}" TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Expander>
+
+                    <Expander x:Name="NetworkExpander" Header="Network" IsExpanded="True">
+                        <ListView ItemsSource="{x:Bind NetworkItems, Mode=OneWay}" SelectionMode="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="models:DetailItem">
+                                    <Grid Padding="0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="220" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock FontFamily="Bahnschrift" FontWeight="SemiBold" Text="{x:Bind Label}" />
+                                        <TextBlock Grid.Column="1" Foreground="{StaticResource ShellTextMutedBrush}" Text="{x:Bind Value}" TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Expander>
                 </StackPanel>
-
-                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
-                    <ProgressRing x:Name="LoadingRing" Width="24" Height="24" IsActive="False" />
-                    <Button x:Name="RefreshButton" Click="RefreshButton_Click" Content="Refresh" />
-                </StackPanel>
-            </Grid>
-
-            <TextBlock x:Name="StatusText" Opacity="0.68" />
-
-            <Expander x:Name="CpuExpander" Header="CPU" IsExpanded="True">
-                <ListView ItemsSource="{x:Bind CpuItems, Mode=OneWay}" SelectionMode="None">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="models:DetailItem">
-                            <Grid Padding="0,10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="220" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock FontWeight="SemiBold" Text="{x:Bind Label}" />
-                                <TextBlock Grid.Column="1" Opacity="0.78" Text="{x:Bind Value}" TextWrapping="Wrap" />
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Expander>
-
-            <Expander x:Name="GpuExpander" Header="GPU" IsExpanded="True">
-                <ListView ItemsSource="{x:Bind GpuItems, Mode=OneWay}" SelectionMode="None">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="models:DetailItem">
-                            <Grid Padding="0,10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="220" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock FontWeight="SemiBold" Text="{x:Bind Label}" />
-                                <TextBlock Grid.Column="1" Opacity="0.78" Text="{x:Bind Value}" TextWrapping="Wrap" />
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Expander>
-
-            <Expander x:Name="MemoryExpander" Header="Memory" IsExpanded="True">
-                <ListView ItemsSource="{x:Bind MemoryItems, Mode=OneWay}" SelectionMode="None">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="models:DetailItem">
-                            <Grid Padding="0,10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="220" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock FontWeight="SemiBold" Text="{x:Bind Label}" />
-                                <TextBlock Grid.Column="1" Opacity="0.78" Text="{x:Bind Value}" TextWrapping="Wrap" />
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Expander>
-
-            <Expander x:Name="StorageExpander" Header="Storage" IsExpanded="True">
-                <ListView ItemsSource="{x:Bind StorageItems, Mode=OneWay}" SelectionMode="None">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="models:DetailItem">
-                            <Grid Padding="0,10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="220" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock FontWeight="SemiBold" Text="{x:Bind Label}" />
-                                <TextBlock Grid.Column="1" Opacity="0.78" Text="{x:Bind Value}" TextWrapping="Wrap" />
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Expander>
-
-            <Expander x:Name="NetworkExpander" Header="Network" IsExpanded="True">
-                <ListView ItemsSource="{x:Bind NetworkItems, Mode=OneWay}" SelectionMode="None">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="models:DetailItem">
-                            <Grid Padding="0,10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="220" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock FontWeight="SemiBold" Text="{x:Bind Label}" />
-                                <TextBlock Grid.Column="1" Opacity="0.78" Text="{x:Bind Value}" TextWrapping="Wrap" />
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Expander>
+            </Border>
         </StackPanel>
     </ScrollViewer>
 </Page>

@@ -28,6 +28,9 @@ public sealed partial class HardwarePage : Page
 
     private void ApplyLocalization()
     {
+        HeroEyebrowText.Text = AppText.Get("HardwareHeroEyebrow");
+        PanelTitleText.Text = AppText.Get("HardwarePanelTitle");
+        InventoryTitleText.Text = AppText.Get("HardwareInventoryTitle");
         PageTitleText.Text = AppText.Get("NavHardware");
         PageSubtitleText.Text = AppText.Get("HardwareSubtitle");
         RefreshButton.Content = AppText.Get("Refresh");

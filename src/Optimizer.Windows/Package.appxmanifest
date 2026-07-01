@@ -16,7 +16,7 @@
   <mp:PhoneIdentity PhoneProductId="7498CA12-0664-4179-A555-3D78CE037BD5" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Optimizer Windows</DisplayName>
+    <DisplayName>Optimizer233-Windows</DisplayName>
     <PublisherDisplayName>neko233</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -35,7 +35,7 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="Optimizer Windows"
+        DisplayName="Optimizer233-Windows"
         Description="Windows optimization and hardware information utility"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"

@@ -20,6 +20,9 @@ public sealed partial class HomePage : Page
 
     private void ApplyLocalization()
     {
+        HeroEyebrowText.Text = AppText.Get("OverviewHeroEyebrow");
+        StatusChipText.Text = AppText.Get("OverviewStatusChip");
+        QuickStatusTitleText.Text = AppText.Get("OverviewQuickStatus");
         PageTitleText.Text = AppText.Get("OverviewTitle");
         PageSubtitleText.Text = AppText.Get("OverviewSubtitle");
         RefreshButton.Content = AppText.Get("Refresh");
@@ -56,6 +59,8 @@ public sealed partial class HomePage : Page
 
             HostNameText.Text = snapshot.DeviceName;
             DeviceText.Text = snapshot.DeviceModel;
+            DeviceSummaryText.Text = snapshot.DeviceName;
+            DeviceModelText.Text = snapshot.DeviceModel;
             WindowsText.Text = snapshot.WindowsVersion;
             BootText.Text = snapshot.BootTime;
             ProcessorText.Text = snapshot.ProcessorName;

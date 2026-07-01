@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Optimizer233-Windows Docs</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <header class="hero">
+    <nav class="topbar">
+      <span class="brand">Optimizer233-Windows</span>
+      <a class="ghost-link" href="https://github.com/neko233-com/Optimizer233-Windows">GitHub</a>
+    </nav>
+
+    <div class="hero-copy">
+      <span class="eyebrow">ROG DARK / WIN11 ONLY</span>
+      <h1>Optimizer233-Windows</h1>
+      <p>WinUI 3 原生桌面优化工具，采用 ROG 黑暗科技风格，聚焦系统概览、硬件信息、安全优化入口，以及 GitHub 自动发布链。</p>
+      <div class="hero-actions">
+        <a id="latest-download" class="primary-btn" href="https://github.com/neko233-com/Optimizer233-Windows/releases/latest">下载最新版本</a>
+        <a class="secondary-btn" href="#install">一键安装</a>
+      </div>
+    </div>
+
+    <aside class="hero-panel">
+      <div class="panel-label">LATEST RELEASE</div>
+      <div id="release-tag" class="panel-value">loading...</div>
+      <div id="release-asset" class="panel-subtle">fetching asset</div>
+    </aside>
+  </header>
+
+  <main class="content">
+    <section id="install" class="section">
+      <div class="section-head">
+        <span class="eyebrow">INSTALL</span>
+        <h2>.ps1 一键安装与卸载</h2>
+      </div>
+      <div class="cards two-up">
+        <article class="card">
+          <h3>安装命令</h3>
+          <p>自动抓取最新 GitHub Release，安装到本地程序目录，并创建桌面 / 开始菜单快捷方式。</p>
+          <pre><code>powershell -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/neko233-com/Optimizer233-Windows/main/scripts/install-latest.ps1 | iex"</code></pre>
+        </article>
+        <article class="card">
+          <h3>卸载命令</h3>
+          <p>安装完成后，程序目录内会自动生成卸载脚本。</p>
+          <pre><code>%LocalAppData%\Programs\Optimizer233-Windows\uninstall.ps1</code></pre>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="eyebrow">FEATURES</span>
+        <h2>核心功能</h2>
+      </div>
+      <div class="cards three-up">
+        <article class="card">
+          <h3>Overview</h3>
+          <p>系统、CPU、内存、存储、网络的 ROG 风格概览面板。</p>
+        </article>
+        <article class="card">
+          <h3>Hardware</h3>
+          <p>WMI 驱动的详细硬件清单，适合盘点和问题诊断。</p>
+        </article>
+        <article class="card">
+          <h3>Optimize</h3>
+          <p>参考 ZyperWin++ 的结构清晰度，但保留更安全的原生工具打开流。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="eyebrow">DELIVERY</span>
+        <h2>GitHub 交付链</h2>
+      </div>
+      <div class="cards two-up">
+        <article class="card">
+          <h3>Releases</h3>
+          <p>Tag 自动构建 Win11 x64 自包含包，并上传 ZIP 到 GitHub Release。</p>
+        </article>
+        <article class="card">
+          <h3>Docs</h3>
+          <p>当前页面通过 GitHub Pages 自动部署，展示安装说明和最新版本信息。</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="./site.js"></script>
+</body>
+</html>

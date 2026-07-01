@@ -9,7 +9,7 @@ $repoRoot = Split-Path -Parent $PSScriptRoot
 $project = Join-Path $repoRoot "src\Optimizer.Windows\Optimizer.Windows.csproj"
 $publishDir = Join-Path $repoRoot "src\Optimizer.Windows\bin\$Configuration\net10.0-windows10.0.26100.0\publish\win11-x64"
 $distDir = Join-Path $repoRoot "dist"
-$archivePath = Join-Path $distDir "Optimizer-Windows-$Version-win11-x64.zip"
+$archivePath = Join-Path $distDir "Optimizer233-Windows-$Version-win11-x64.zip"
 
 dotnet publish $project -p:PublishProfile=win11-x64-folder -c $Configuration
 

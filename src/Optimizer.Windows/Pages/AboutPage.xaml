@@ -9,26 +9,44 @@
     mc:Ignorable="d">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Padding="24,20,24,32" Spacing="20">
-            <TextBlock x:Name="PageTitleText" Style="{StaticResource TitleTextBlockStyle}" Text="About" />
-
-            <Border Style="{StaticResource SectionCardStyle}">
+        <StackPanel Padding="24,20,24,32" Spacing="24">
+            <Border Background="{StaticResource ShellElevatedBrush}" BorderBrush="{StaticResource ShellAccentDimBrush}" BorderThickness="1" CornerRadius="10" Padding="24">
                 <StackPanel Spacing="10">
-                    <TextBlock x:Name="IntroTitleText" FontSize="22" FontWeight="SemiBold" Text="Optimizer Windows" />
-                    <TextBlock x:Name="IntroBody1Text" Opacity="0.78" Text="Windows-only utility shell built with WinUI 3 and latest stable Windows App SDK." TextWrapping="Wrap" />
-                    <TextBlock x:Name="IntroBody2Text" Opacity="0.78" Text="Current scope: live device overview, hardware inspection, and safe deep links into native optimization tools." TextWrapping="Wrap" />
+                    <Border Style="{StaticResource TechChipStyle}" HorizontalAlignment="Left">
+                        <TextBlock x:Name="HeroEyebrowText" FontFamily="Bahnschrift" Foreground="{StaticResource ShellAccentSecondaryBrush}" Text="PROJECT DOSSIER" />
+                    </Border>
+                    <TextBlock x:Name="PageTitleText" Style="{StaticResource TitleTextBlockStyle}" Text="About" />
+                    <TextBlock x:Name="IntroTitleText" FontSize="22" FontFamily="Bahnschrift" FontWeight="SemiBold" Text="Optimizer Windows" />
+                    <TextBlock x:Name="IntroBody1Text" Foreground="{StaticResource ShellTextMutedBrush}" Text="Windows-only utility shell built with WinUI 3 and latest stable Windows App SDK." TextWrapping="Wrap" />
+                    <TextBlock x:Name="IntroBody2Text" Foreground="{StaticResource ShellTextMutedBrush}" Text="Current scope: live device overview, hardware inspection, and safe deep links into native optimization tools." TextWrapping="Wrap" />
                 </StackPanel>
             </Border>
 
-            <Border Style="{StaticResource SectionCardStyle}">
-                <StackPanel Spacing="10">
-                    <TextBlock x:Name="RoadmapTitleText" FontSize="20" FontWeight="SemiBold" Text="Roadmap" />
-                    <TextBlock x:Name="RoadmapItem1Text" Text="1. Smart startup-impact analyzer" />
-                    <TextBlock x:Name="RoadmapItem2Text" Text="2. Disk cleanup recommendations with file-size scoring" />
-                    <TextBlock x:Name="RoadmapItem3Text" Text="3. Service and scheduled-task insight panel" />
-                    <TextBlock x:Name="RoadmapItem4Text" Text="4. Exportable hardware report for troubleshooting" />
-                </StackPanel>
-            </Border>
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.2*" />
+                    <ColumnDefinition Width="0.8*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource SectionCardStyle}">
+                    <StackPanel Spacing="10">
+                        <TextBlock x:Name="RoadmapTitleText" FontSize="20" FontFamily="Bahnschrift" FontWeight="SemiBold" Text="Roadmap" />
+                        <TextBlock x:Name="RoadmapItem1Text" Foreground="{StaticResource ShellTextMutedBrush}" Text="1. Smart startup-impact analyzer" />
+                        <TextBlock x:Name="RoadmapItem2Text" Foreground="{StaticResource ShellTextMutedBrush}" Text="2. Disk cleanup recommendations with file-size scoring" />
+                        <TextBlock x:Name="RoadmapItem3Text" Foreground="{StaticResource ShellTextMutedBrush}" Text="3. Service and scheduled-task insight panel" />
+                        <TextBlock x:Name="RoadmapItem4Text" Foreground="{StaticResource ShellTextMutedBrush}" Text="4. Exportable hardware report for troubleshooting" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource SectionCardStyle}">
+                    <StackPanel Spacing="10">
+                        <TextBlock x:Name="PlatformTitleText" FontSize="20" FontFamily="Bahnschrift" FontWeight="SemiBold" Text="Platform" />
+                        <TextBlock x:Name="PlatformBody1Text" Foreground="{StaticResource ShellTextMutedBrush}" Text="Win11 only" />
+                        <TextBlock x:Name="PlatformBody2Text" Foreground="{StaticResource ShellTextMutedBrush}" Text="WinUI 3 + Windows App SDK 2.2.0" />
+                        <TextBlock x:Name="PlatformBody3Text" Foreground="{StaticResource ShellTextMutedBrush}" Text="Binary release + GitHub Pages docs" />
+                    </StackPanel>
+                </Border>
+            </Grid>
         </StackPanel>
     </ScrollViewer>
 </Page>

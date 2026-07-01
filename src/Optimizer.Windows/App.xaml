@@ -9,30 +9,82 @@
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
             </ResourceDictionary.MergedDictionaries>
-            <SolidColorBrush x:Key="ShellSurfaceBrush" Color="#141A23" />
-            <SolidColorBrush x:Key="ShellCardBrush" Color="#1D2430" />
-            <SolidColorBrush x:Key="ShellCardMutedBrush" Color="#111723" />
-            <SolidColorBrush x:Key="ShellBorderBrush" Color="#2C3747" />
-            <SolidColorBrush x:Key="ShellAccentBrush" Color="#6FD1B8" />
+            <SolidColorBrush x:Key="ShellSurfaceBrush" Color="#06070B" />
+            <SolidColorBrush x:Key="ShellPaneBrush" Color="#090A10" />
+            <SolidColorBrush x:Key="ShellCardMutedBrush" Color="#0C0E14" />
+            <SolidColorBrush x:Key="ShellBorderBrush" Color="#3B111B" />
+            <SolidColorBrush x:Key="ShellBorderSoftBrush" Color="#231017" />
+            <SolidColorBrush x:Key="ShellAccentBrush" Color="#FF234D" />
+            <SolidColorBrush x:Key="ShellAccentSecondaryBrush" Color="#FF4D6D" />
+            <SolidColorBrush x:Key="ShellAccentDimBrush" Color="#7C1D31" />
+            <SolidColorBrush x:Key="ShellTextMutedBrush" Color="#A9AFBC" />
+            <SolidColorBrush x:Key="ShellTextFaintBrush" Color="#7F8794" />
+
+            <LinearGradientBrush x:Key="ShellCardBrush" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#11131A" Offset="0" />
+                <GradientStop Color="#0A0C12" Offset="1" />
+            </LinearGradientBrush>
+
+            <LinearGradientBrush x:Key="ShellElevatedBrush" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#1A0B10" Offset="0" />
+                <GradientStop Color="#0B0D12" Offset="0.45" />
+                <GradientStop Color="#11070D" Offset="1" />
+            </LinearGradientBrush>
 
             <Style x:Key="SectionCardStyle" TargetType="Border">
                 <Setter Property="Background" Value="{StaticResource ShellCardBrush}" />
                 <Setter Property="BorderBrush" Value="{StaticResource ShellBorderBrush}" />
                 <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="CornerRadius" Value="8" />
                 <Setter Property="Padding" Value="20" />
             </Style>
 
             <Style x:Key="MetricValueTextStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="28" />
                 <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="FontFamily" Value="Bahnschrift" />
                 <Setter Property="TextWrapping" Value="Wrap" />
             </Style>
 
             <Style x:Key="MetricLabelTextStyle" TargetType="TextBlock">
-                <Setter Property="Opacity" Value="0.72" />
+                <Setter Property="Foreground" Value="{StaticResource ShellTextMutedBrush}" />
                 <Setter Property="FontSize" Value="13" />
+                <Setter Property="FontFamily" Value="Bahnschrift" />
+                <Setter Property="CharacterSpacing" Value="120" />
                 <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+
+            <Style x:Key="PrimaryActionButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="{StaticResource ShellAccentBrush}" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="BorderBrush" Value="{StaticResource ShellAccentSecondaryBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Padding" Value="16,10" />
+                <Setter Property="CornerRadius" Value="6" />
+                <Setter Property="FontFamily" Value="Bahnschrift" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+            </Style>
+
+            <Style x:Key="SecondaryActionButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="#14080C" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="BorderBrush" Value="{StaticResource ShellBorderBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Padding" Value="16,10" />
+                <Setter Property="CornerRadius" Value="6" />
+                <Setter Property="FontFamily" Value="Bahnschrift" />
+            </Style>
+
+            <Style x:Key="TechChipStyle" TargetType="Border">
+                <Setter Property="Background" Value="#18080D" />
+                <Setter Property="BorderBrush" Value="{StaticResource ShellAccentDimBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="999" />
+                <Setter Property="Padding" Value="10,4" />
+            </Style>
+
+            <Style x:Key="PresetCardStyle" TargetType="Border" BasedOn="{StaticResource SectionCardStyle}">
+                <Setter Property="Padding" Value="18" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>

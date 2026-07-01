@@ -27,11 +27,12 @@ jobs:
         run: |
           $version = if ("${{ github.ref_type }}" -eq "tag") { "${{ github.ref_name }}" } else { "manual-${{ github.run_number }}" }
           ./scripts/package-release.ps1 -Version $version
+          Copy-Item "dist/Optimizer233-Windows-$version-win11-x64.zip" "dist/Optimizer233-Windows-latest-win11-x64.zip" -Force
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: optimizer-windows-win11-x64
+          name: optimizer233-windows-win11-x64
           path: dist/*.zip
 
       - name: Publish GitHub release
