@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="Optimizer_Windows.Pages.OptimizePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:Optimizer_Windows.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Loaded="Page_Loaded"
+    mc:Ignorable="d">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Padding="24,20,24,32" Spacing="24">
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Spacing="6">
+                    <TextBlock x:Name="PageTitleText" Style="{StaticResource TitleTextBlockStyle}" Text="Optimize" />
+                    <TextBlock x:Name="PageSubtitleText" Opacity="0.78" Text="Safe shortcuts into trusted Windows maintenance surfaces." />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                    <ProgressRing x:Name="LoadingRing" Width="24" Height="24" IsActive="False" />
+                    <Button x:Name="RefreshButton" Click="RefreshButton_Click" Content="Refresh" />
+                </StackPanel>
+            </Grid>
+
+            <TextBlock x:Name="StatusText" Opacity="0.68" />
+
+            <Border Style="{StaticResource SectionCardStyle}">
+                <StackPanel Spacing="12">
+                    <TextBlock x:Name="TempSnapshotTitleText" FontSize="20" FontWeight="SemiBold" Text="Temp Folder Snapshot" />
+                    <TextBlock x:Name="TempPathText" Opacity="0.72" TextWrapping="Wrap" />
+                    <Grid ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Spacing="4">
+                            <TextBlock x:Name="TempFilesLabelText" Style="{StaticResource MetricLabelTextStyle}" Text="Files" />
+                            <TextBlock x:Name="TempFileCountText" FontSize="24" FontWeight="SemiBold" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Spacing="4">
+                            <TextBlock x:Name="TempSizeLabelText" Style="{StaticResource MetricLabelTextStyle}" Text="Estimated size" />
+                            <TextBlock x:Name="TempFolderSizeText" FontSize="24" FontWeight="SemiBold" />
+                        </StackPanel>
+                    </Grid>
+                    <Button x:Name="OpenTempFolderButton" Click="OpenTempFolderButton_Click" Content="Open Temp Folder" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+
+            <Grid ColumnSpacing="16" RowSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource SectionCardStyle}">
+                    <StackPanel Spacing="10">
+                        <TextBlock x:Name="StorageSenseTitleText" FontSize="18" FontWeight="SemiBold" Text="Storage Sense" />
+                        <TextBlock x:Name="StorageSenseBodyText" Opacity="0.72" Text="Tune automatic cleanup policy and storage recommendations." TextWrapping="Wrap" />
+                        <Button x:Name="OpenStorageSenseButton" Click="OpenStorageSenseButton_Click" Content="Open Storage Sense" HorizontalAlignment="Left" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource SectionCardStyle}">
+                    <StackPanel Spacing="10">
+                        <TextBlock x:Name="StartupAppsTitleText" FontSize="18" FontWeight="SemiBold" Text="Startup Apps" />
+                        <TextBlock x:Name="StartupAppsBodyText" Opacity="0.72" Text="Review boot-time impact and disable heavy startup entries." TextWrapping="Wrap" />
+                        <Button x:Name="OpenStartupAppsButton" Click="OpenStartupAppsButton_Click" Content="Open Startup Apps" HorizontalAlignment="Left" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource SectionCardStyle}">
+                    <StackPanel Spacing="10">
+                        <TextBlock x:Name="TaskManagerTitleText" FontSize="18" FontWeight="SemiBold" Text="Task Manager" />
+                        <TextBlock x:Name="TaskManagerBodyText" Opacity="0.72" Text="Inspect live process pressure and memory / CPU spikes." TextWrapping="Wrap" />
+                        <Button x:Name="OpenTaskManagerButton" Click="OpenTaskManagerButton_Click" Content="Open Task Manager" HorizontalAlignment="Left" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource SectionCardStyle}">
+                    <StackPanel Spacing="10">
+                        <TextBlock x:Name="DiskCleanupTitleText" FontSize="18" FontWeight="SemiBold" Text="Disk Cleanup" />
+                        <TextBlock x:Name="DiskCleanupBodyText" Opacity="0.72" Text="Launch native cleanup wizard instead of running silent deletes." TextWrapping="Wrap" />
+                        <Button x:Name="OpenDiskCleanupButton" Click="OpenDiskCleanupButton_Click" Content="Open Disk Cleanup" HorizontalAlignment="Left" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource SectionCardStyle}">
+                    <StackPanel Spacing="10">
+                        <TextBlock x:Name="WindowsUpdateTitleText" FontSize="18" FontWeight="SemiBold" Text="Windows Update" />
+                        <TextBlock x:Name="WindowsUpdateBodyText" Opacity="0.72" Text="Check pending updates, driver rollups, and reboot requirements." TextWrapping="Wrap" />
+                        <Button x:Name="OpenWindowsUpdateButton" Click="OpenWindowsUpdateButton_Click" Content="Open Windows Update" HorizontalAlignment="Left" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource SectionCardStyle}">
+                    <StackPanel Spacing="10">
+                        <TextBlock x:Name="PowerSettingsTitleText" FontSize="18" FontWeight="SemiBold" Text="Power Settings" />
+                        <TextBlock x:Name="PowerSettingsBodyText" Opacity="0.72" Text="Switch thermal / battery behavior with native power surfaces." TextWrapping="Wrap" />
+                        <Button x:Name="OpenPowerSettingsButton" Click="OpenPowerSettingsButton_Click" Content="Open Power Settings" HorizontalAlignment="Left" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

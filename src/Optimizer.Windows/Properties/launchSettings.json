@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Optimizer.Windows (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Optimizer.Windows (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
