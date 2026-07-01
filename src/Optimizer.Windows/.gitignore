@@ -42,6 +42,7 @@ BundleArtifacts/
 publish/
 *.pubxml
 PublishScripts/
+!Properties/PublishProfiles/win11-x64-folder.pubxml
 
 # Code analysis and tooling
 _ReSharper*/
