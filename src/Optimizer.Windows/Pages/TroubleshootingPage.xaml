@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="Optimizer_Windows.Pages.TroubleshootingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:Optimizer_Windows.Models"
+    Background="{StaticResource ShellSurfaceBrush}"
+    Loaded="Page_Loaded"
+    mc:Ignorable="d">
+    <Grid Padding="16" RowSpacing="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid ColumnSpacing="14">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition Width="0.5*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Style="{StaticResource SectionCardStyle}">
+                <StackPanel Spacing="10">
+                    <TextBlock x:Name="ServicesTitleText" FontSize="20" FontFamily="Bahnschrift" FontWeight="SemiBold" Text="Services" />
+                    <ListView ItemsSource="{x:Bind Services, Mode=OneWay}" SelectionMode="None">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="models:ServiceItemInfo">
+                                <Grid Padding="0,6" ColumnSpacing="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox IsChecked="{x:Bind IsSelected, Mode=TwoWay}" />
+                                    <StackPanel Grid.Column="1" Spacing="2">
+                                        <TextBlock FontSize="15" FontFamily="Bahnschrift" FontWeight="SemiBold" Text="{x:Bind DisplayName}" />
+                                        <TextBlock Foreground="{StaticResource ShellTextMutedBrush}" Text="{x:Bind Name}" />
+                                        <TextBlock Foreground="{StaticResource ShellTextFaintBrush}" Text="{x:Bind StartMode}" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="1" Style="{StaticResource SectionCardStyle}">
+                <StackPanel Spacing="10">
+                    <TextBlock x:Name="TasksTitleText" FontSize="20" FontFamily="Bahnschrift" FontWeight="SemiBold" Text="Scheduled Tasks" />
+                    <ListView ItemsSource="{x:Bind Tasks, Mode=OneWay}" SelectionMode="None">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="models:ScheduledTaskInfo">
+                                <Grid Padding="0,6" ColumnSpacing="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox IsChecked="{x:Bind IsSelected, Mode=TwoWay}" />
+                                    <StackPanel Grid.Column="1" Spacing="2">
+                                        <TextBlock FontSize="15" FontFamily="Bahnschrift" FontWeight="SemiBold" Text="{x:Bind TaskName}" />
+                                        <TextBlock Foreground="{StaticResource ShellTextMutedBrush}" Text="{x:Bind TaskPath}" TextWrapping="Wrap" />
+                                        <TextBlock Foreground="{StaticResource ShellTextFaintBrush}" Text="{x:Bind State}" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="1" ColumnSpacing="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button x:Name="RefreshButton" Grid.Column="0" Click="RefreshButton_Click" Style="{StaticResource SecondaryActionButtonStyle}" Content="Refresh" />
+            <Button x:Name="ServicesManualButton" Grid.Column="1" Click="ServicesManualButton_Click" Style="{StaticResource SecondaryActionButtonStyle}" Content="Services Manual" />
+            <Button x:Name="ServicesDisabledButton" Grid.Column="2" Click="ServicesDisabledButton_Click" Style="{StaticResource SecondaryActionButtonStyle}" Content="Services Disabled" />
+            <Button x:Name="TasksEnableButton" Grid.Column="3" Click="TasksEnableButton_Click" Style="{StaticResource SecondaryActionButtonStyle}" Content="Enable Tasks" />
+            <Button x:Name="TasksDisableButton" Grid.Column="4" Click="TasksDisableButton_Click" Style="{StaticResource SecondaryActionButtonStyle}" Content="Disable Tasks" />
+            <Button x:Name="OpenToolsButton" Grid.Column="5" Click="OpenToolsButton_Click" Style="{StaticResource PrimaryActionButtonStyle}" Content="Open Native Tools" />
+        </Grid>
+    </Grid>
+</Page>

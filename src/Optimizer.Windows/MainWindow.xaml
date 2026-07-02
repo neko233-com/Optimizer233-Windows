@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:Optimizer_Windows"
+    xmlns:models="using:Optimizer_Windows.Models"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Optimizer233-Windows"
     mc:Ignorable="d">
@@ -13,38 +14,151 @@
     </Window.SystemBackdrop>
 
     <Grid Background="{StaticResource ShellSurfaceBrush}">
+        <Grid.KeyboardAccelerators>
+            <KeyboardAccelerator Key="K" Modifiers="Control" Invoked="OpenCommandPaletteAccelerator_Invoked" />
+            <KeyboardAccelerator Key="Escape" Invoked="CloseCommandPaletteAccelerator_Invoked" />
+        </Grid.KeyboardAccelerators>
         <Grid.RowDefinitions>
-            <RowDefinition Height="48" />
+            <RowDefinition Height="72" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TitleBar
-            x:Name="AppTitleBar"
-            Title="Optimizer233-Windows"
-            BackRequested="TitleBar_BackRequested"
-            IsBackButtonVisible="{x:Bind NavFrame.CanGoBack, Mode=OneWay}"
-            IsPaneToggleButtonVisible="True"
-            PaneToggleRequested="TitleBar_PaneToggleRequested">
-            <TitleBar.IconSource>
-                <ImageIconSource ImageSource="Assets/AppIcon.ico" />
-            </TitleBar.IconSource>
-        </TitleBar>
+        <Grid x:Name="BackdropHost" Grid.RowSpan="2" IsHitTestVisible="False" />
+        <Grid Grid.RowSpan="2" IsHitTestVisible="False" Opacity="0.72">
+            <Rectangle Width="560" Height="120" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-120,84,0,0" RadiusX="28" RadiusY="28">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                        <GradientStop Color="#00FF4A71" Offset="0" />
+                        <GradientStop Color="#44FF4A71" Offset="0.58" />
+                        <GradientStop Color="#00FF4A71" Offset="1" />
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+                <Rectangle.RenderTransform>
+                    <RotateTransform Angle="-12" />
+                </Rectangle.RenderTransform>
+            </Rectangle>
+            <Rectangle Width="620" Height="96" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-160,132" RadiusX="28" RadiusY="28">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                        <GradientStop Color="#002C8CFF" Offset="0" />
+                        <GradientStop Color="#2A58B0FF" Offset="0.5" />
+                        <GradientStop Color="#002C8CFF" Offset="1" />
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+                <Rectangle.RenderTransform>
+                    <RotateTransform Angle="-18" />
+                </Rectangle.RenderTransform>
+            </Rectangle>
+            <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="260,70,180,0">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                        <GradientStop Color="#00FF5E7F" Offset="0" />
+                        <GradientStop Color="#80FF5E7F" Offset="0.55" />
+                        <GradientStop Color="#00FF5E7F" Offset="1" />
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+        </Grid>
+
+        <Grid x:Name="AppHeaderBar" Background="{StaticResource ShellPaneBrush}" Padding="18,12,18,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                <Image Width="20" Height="20" Source="Assets/Square44x44Logo.scale-200.png" />
+                <TextBlock x:Name="AppHeaderTitleText" FontFamily="Bahnschrift" FontWeight="SemiBold" FontSize="15" />
+                <TextBlock x:Name="AppHeaderVersionText" Foreground="{StaticResource ShellTextFaintBrush}" FontFamily="Bahnschrift" />
+            </StackPanel>
+
+            <Button
+                x:Name="OpenCommandPaletteButton"
+                Grid.Column="1"
+                MinWidth="320"
+                MaxWidth="660"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Click="OpenCommandPaletteButton_Click"
+                Background="#151A25"
+                BorderBrush="{StaticResource ShellBorderSoftBrush}"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="14,10">
+                <Grid ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <FontIcon Glyph="&#xE721;" Foreground="{StaticResource ShellTextFaintBrush}" />
+                    <TextBlock x:Name="OpenCommandPaletteLabelText" Grid.Column="1" VerticalAlignment="Center" Foreground="{StaticResource ShellTextMutedBrush}" TextTrimming="CharacterEllipsis" />
+                    <Border Grid.Column="2" Style="{StaticResource PillTagBorderStyle}" Background="#1C1420">
+                        <TextBlock x:Name="SearchShortcutText" FontFamily="Bahnschrift" Foreground="{StaticResource ShellTextFaintBrush}" />
+                    </Border>
+                </Grid>
+            </Button>
+
+            <Border Grid.Column="2" Style="{StaticResource TechChipStyle}" VerticalAlignment="Center">
+                <TextBlock x:Name="CurrentSectionText" FontFamily="Bahnschrift" Foreground="{StaticResource ShellAccentSecondaryBrush}" />
+            </Border>
+        </Grid>
 
         <NavigationView
             x:Name="NavView"
             Grid.Row="1"
             Background="{StaticResource ShellSurfaceBrush}"
+            OpenPaneLength="220"
+            CompactPaneLength="60"
+            CompactModeThresholdWidth="0"
+            ExpandedModeThresholdWidth="0"
+            IsPaneOpen="True"
             IsBackButtonVisible="Collapsed"
             IsPaneToggleButtonVisible="False"
+            IsSettingsVisible="False"
+            AlwaysShowHeader="False"
+            PaneDisplayMode="Left"
             SelectionChanged="NavView_SelectionChanged">
+            <NavigationView.Resources>
+                <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#090B12" />
+                <SolidColorBrush x:Key="NavigationViewItemBackgroundSelected" Color="#161923" />
+                <SolidColorBrush x:Key="NavigationViewItemBackgroundSelectedPointerOver" Color="#1D2130" />
+                <SolidColorBrush x:Key="NavigationViewItemBackgroundSelectedPressed" Color="#151A24" />
+                <SolidColorBrush x:Key="NavigationViewItemBackgroundPointerOver" Color="#10141D" />
+                <SolidColorBrush x:Key="NavigationViewItemBackgroundPressed" Color="#151925" />
+                <SolidColorBrush x:Key="NavigationViewItemForegroundSelected" Color="#FFFFFF" />
+                <SolidColorBrush x:Key="NavigationViewItemForegroundPointerOver" Color="#FFF4F7FB" />
+                <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="#47B8FF" />
+            </NavigationView.Resources>
             <NavigationView.MenuItems>
                 <NavigationViewItem
                     x:Name="OverviewNavItem"
-                    Content="Overview"
+                    Content="Home"
                     IsSelected="True"
                     Tag="home">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE946;" />
+                        <FontIcon Glyph="&#xE80F;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="OptimizeNavItem" Content="Optimize" Tag="optimize">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE7AD;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="RestoreNavItem" Content="Restore" Tag="restore">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE72C;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="SecurityNavItem" Content="Security" Tag="security">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE72E;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="CleanupNavItem" Content="Cleanup" Tag="cleanup">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE74D;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem x:Name="HardwareNavItem" Content="Hardware" Tag="hardware">
@@ -52,9 +166,34 @@
                         <FontIcon Glyph="&#xE950;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Name="OptimizeNavItem" Content="Optimize" Tag="optimize">
+                <NavigationViewItem x:Name="FeaturesNavItem" Content="Features" Tag="features">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE7AD;" />
+                        <FontIcon Glyph="&#xE7BE;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="WslNavItem" Content="WSL" Tag="wsl">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE756;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="UpdatesNavItem" Content="Updates" Tag="updates">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE895;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="OfficeNavItem" Content="Office" Tag="office">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8A5;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="AppxNavItem" Content="Appx" Tag="appx">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE71D;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="TroubleshootNavItem" Content="Troubleshoot" Tag="troubleshoot">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE897;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
@@ -67,5 +206,70 @@
             </NavigationView.FooterMenuItems>
             <Frame x:Name="NavFrame" />
         </NavigationView>
+
+        <Grid
+            x:Name="CommandPaletteOverlay"
+            Grid.RowSpan="2"
+            Background="#B005060A"
+            Visibility="Collapsed">
+            <Border
+                Width="760"
+                MaxHeight="620"
+                Margin="0,100,0,0"
+                Padding="18"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Background="{StaticResource ShellCardBrush}"
+                BorderBrush="{StaticResource ShellAccentDimBrush}"
+                BorderThickness="1"
+                CornerRadius="16">
+                <Grid RowSpacing="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Spacing="4">
+                            <TextBlock x:Name="CommandPaletteTitleText" FontFamily="Bahnschrift" FontSize="22" FontWeight="SemiBold" />
+                            <TextBlock x:Name="CommandPaletteHintText" Foreground="{StaticResource ShellTextMutedBrush}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <Border Grid.Column="1" Style="{StaticResource TechChipStyle}" VerticalAlignment="Top">
+                            <TextBlock Text="ESC" FontFamily="Bahnschrift" Foreground="{StaticResource ShellTextFaintBrush}" />
+                        </Border>
+                    </Grid>
+
+                    <TextBox
+                        x:Name="CommandPaletteBox"
+                        PlaceholderText="Search pages, actions, and tools"
+                        KeyDown="CommandPaletteBox_KeyDown"
+                        TextChanged="CommandPaletteBox_TextChanged" />
+
+                    <ListView
+                        x:Name="CommandPaletteList"
+                        IsItemClickEnabled="True"
+                        ItemsSource="{x:Bind PaletteCommands, Mode=OneWay}"
+                        KeyDown="CommandPaletteList_KeyDown"
+                        SelectionMode="Single"
+                        ItemClick="CommandPaletteList_ItemClick">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="models:SearchCommand">
+                                <Border Margin="0,0,0,8" Style="{StaticResource DataRowCardStyle}" Padding="14">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock FontFamily="Bahnschrift" FontSize="16" FontWeight="SemiBold" Text="{x:Bind Title}" TextWrapping="Wrap" />
+                                        <TextBlock Foreground="{StaticResource ShellTextMutedBrush}" Text="{x:Bind Description}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

@@ -22,6 +22,8 @@ public sealed class SystemSnapshot
 
     public required string NetworkSummary { get; init; }
 
+    public required string InputSummary { get; init; }
+
     public required IReadOnlyList<DiskUsage> Drives { get; init; }
 
     public required IReadOnlyList<DetailItem> CpuDetails { get; init; }
@@ -33,4 +35,6 @@ public sealed class SystemSnapshot
     public required IReadOnlyList<DetailItem> StorageDetails { get; init; }
 
     public required IReadOnlyList<DetailItem> NetworkDetails { get; init; }
+
+    public required IReadOnlyList<DetailItem> InputDetails { get; init; }
 }

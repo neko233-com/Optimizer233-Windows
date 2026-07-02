@@ -67,7 +67,27 @@
         </article>
         <article class="card">
           <h3>Optimize</h3>
-          <p>参考 ZyperWin++ 的结构清晰度，但保留更安全的原生工具打开流。</p>
+          <p>参考 ZyperWin++ 的结构清晰度，加入全局搜索与每个操作的高/中/低风险标记。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="eyebrow">CLI / AGENT</span>
+        <h2>命令行与 Agent 接入</h2>
+      </div>
+      <div class="cards two-up">
+        <article class="card">
+          <h3>CLI Binary</h3>
+          <p>安装后自带 <code>tools\Optimizer233.Agent.exe</code>，支持列出操作、读取风险级别、JSON 输出与自动化执行。</p>
+          <pre><code>Optimizer233.Agent.exe list --json
+Optimizer233.Agent.exe get cleanup-run --json
+Optimizer233.Agent.exe exec cleanup-scan --json</code></pre>
+        </article>
+        <article class="card">
+          <h3>Risk-aware Ops</h3>
+          <p>所有 CLI 操作都带 low / medium / high 风险元数据，便于 agent 在执行前做策略判断。</p>
         </article>
       </div>
     </section>

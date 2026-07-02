@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="Optimizer_Windows.Pages.SecurityPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{StaticResource ShellSurfaceBrush}"
+    Loaded="Page_Loaded"
+    mc:Ignorable="d">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <Grid Padding="20" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Style="{StaticResource HeroPanelStyle}">
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="340" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Spacing="8">
+                    <TextBlock x:Name="PageTitleText" FontSize="26" FontFamily="Bahnschrift" FontWeight="SemiBold" />
+                    <TextBlock x:Name="PageSubtitleText" Foreground="{StaticResource ShellTextMutedBrush}" TextWrapping="Wrap" />
+                </StackPanel>
+
+                <Border Grid.Column="1" Style="{StaticResource InsetPanelStyle}">
+                    <StackPanel Spacing="10">
+                        <TextBlock x:Name="StatusCardTitleText" FontSize="18" FontFamily="Bahnschrift" FontWeight="SemiBold" />
+                        <TextBlock x:Name="StatusText" Foreground="{StaticResource ShellTextMutedBrush}" TextWrapping="Wrap" />
+                        <Button x:Name="RefreshButton" Click="RefreshButton_Click" HorizontalAlignment="Left" Style="{StaticResource SecondaryActionButtonStyle}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" ColumnSpacing="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Style="{StaticResource SectionCardStyle}" Padding="18">
+                <StackPanel Spacing="8">
+                    <TextBlock x:Name="AntivirusLabelText" Foreground="{StaticResource ShellTextMutedBrush}" FontFamily="Bahnschrift" />
+                    <TextBlock x:Name="AntivirusValueText" FontSize="28" FontFamily="Bahnschrift" FontWeight="SemiBold" />
+                    <TextBlock x:Name="AntivirusHintText" Foreground="{StaticResource ShellTextFaintBrush}" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="1" Style="{StaticResource SectionCardStyle}" Padding="18">
+                <StackPanel Spacing="8">
+                    <TextBlock x:Name="RealtimeLabelText" Foreground="{StaticResource ShellTextMutedBrush}" FontFamily="Bahnschrift" />
+                    <TextBlock x:Name="RealtimeValueText" FontSize="28" FontFamily="Bahnschrift" FontWeight="SemiBold" />
+                    <TextBlock x:Name="RealtimeHintText" Foreground="{StaticResource ShellTextFaintBrush}" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="2" Style="{StaticResource SectionCardStyle}" Padding="18">
+                <StackPanel Spacing="8">
+                    <TextBlock x:Name="FirewallLabelText" Foreground="{StaticResource ShellTextMutedBrush}" FontFamily="Bahnschrift" />
+                    <TextBlock x:Name="FirewallValueText" FontSize="28" FontFamily="Bahnschrift" FontWeight="SemiBold" />
+                    <TextBlock x:Name="FirewallHintText" Foreground="{StaticResource ShellTextFaintBrush}" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="2" ColumnSpacing="14">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.2*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" RowSpacing="14">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Style="{StaticResource SectionCardStyle}" Padding="18">
+                    <StackPanel Spacing="12">
+                        <TextBlock x:Name="SwitchesCardTitleText" FontSize="20" FontFamily="Bahnschrift" FontWeight="SemiBold" />
+                        <TextBlock x:Name="SwitchHintText" Foreground="{StaticResource ShellTextMutedBrush}" TextWrapping="Wrap" />
+                        <AutoSuggestBox x:Name="ToggleSearchBox" TextChanged="ToggleSearchBox_TextChanged" />
+                        <Grid ColumnSpacing="14" RowSpacing="14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Border x:Name="RealtimeToggleCard" Grid.Row="0" Grid.Column="0" Style="{StaticResource InsetPanelStyle}" Padding="14">
+                                <StackPanel Spacing="8">
+                                    <TextBlock x:Name="RealtimeToggleLabelText" FontFamily="Bahnschrift" FontWeight="SemiBold" />
+                                    <ToggleSwitch x:Name="RealtimeToggle" Toggled="RealtimeToggle_Toggled" OffContent="Off" OnContent="On" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border x:Name="DomainToggleCard" Grid.Row="0" Grid.Column="1" Style="{StaticResource InsetPanelStyle}" Padding="14">
+                                <StackPanel Spacing="8">
+                                    <TextBlock x:Name="DomainToggleLabelText" FontFamily="Bahnschrift" FontWeight="SemiBold" />
+                                    <ToggleSwitch x:Name="DomainToggle" Toggled="DomainToggle_Toggled" OffContent="Off" OnContent="On" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border x:Name="PrivateToggleCard" Grid.Row="1" Grid.Column="0" Style="{StaticResource InsetPanelStyle}" Padding="14">
+                                <StackPanel Spacing="8">
+                                    <TextBlock x:Name="PrivateToggleLabelText" FontFamily="Bahnschrift" FontWeight="SemiBold" />
+                                    <ToggleSwitch x:Name="PrivateToggle" Toggled="PrivateToggle_Toggled" OffContent="Off" OnContent="On" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border x:Name="PublicToggleCard" Grid.Row="1" Grid.Column="1" Style="{StaticResource InsetPanelStyle}" Padding="14">
+                                <StackPanel Spacing="8">
+                                    <TextBlock x:Name="PublicToggleLabelText" FontFamily="Bahnschrift" FontWeight="SemiBold" />
+                                    <ToggleSwitch x:Name="PublicToggle" Toggled="PublicToggle_Toggled" OffContent="Off" OnContent="On" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="1" Style="{StaticResource SectionCardStyle}" Padding="18">
+                    <Grid RowSpacing="12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock x:Name="DetailsCardTitleText" FontSize="20" FontFamily="Bahnschrift" FontWeight="SemiBold" />
+                        <TextBlock x:Name="EngineText" Grid.Row="1" Foreground="{StaticResource ShellTextMutedBrush}" TextWrapping="Wrap" />
+                        <TextBlock x:Name="LastScanText" Grid.Row="2" Foreground="{StaticResource ShellTextMutedBrush}" TextWrapping="Wrap" />
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <Border Grid.Column="1" Style="{StaticResource SectionCardStyle}" Padding="18">
+                <StackPanel Spacing="12">
+                    <TextBlock x:Name="ActionsCardTitleText" FontSize="20" FontFamily="Bahnschrift" FontWeight="SemiBold" />
+                    <Button x:Name="OpenSecurityButton" Click="OpenSecurityButton_Click" Style="{StaticResource SecondaryActionButtonStyle}" />
+                    <Button x:Name="OpenFirewallButton" Click="OpenFirewallButton_Click" Style="{StaticResource SecondaryActionButtonStyle}" />
+                    <Button x:Name="OpenUpdateButton" Click="OpenUpdateButton_Click" Style="{StaticResource PrimaryActionButtonStyle}" />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+    </ScrollViewer>
+</Page>

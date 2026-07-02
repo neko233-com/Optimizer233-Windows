@@ -6,11 +6,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:Optimizer_Windows.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{StaticResource ShellSurfaceBrush}"
     mc:Ignorable="d">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Padding="24,20,24,32" Spacing="24">
-            <Border Background="{StaticResource ShellElevatedBrush}" BorderBrush="{StaticResource ShellAccentDimBrush}" BorderThickness="1" CornerRadius="10" Padding="24">
+            <Border Style="{StaticResource HeroPanelStyle}" Padding="24">
                 <StackPanel Spacing="10">
                     <Border Style="{StaticResource TechChipStyle}" HorizontalAlignment="Left">
                         <TextBlock x:Name="HeroEyebrowText" FontFamily="Bahnschrift" Foreground="{StaticResource ShellAccentSecondaryBrush}" Text="PROJECT DOSSIER" />

@@ -28,6 +28,8 @@ public sealed class SystemSnapshotService
         var computerRow = QueryFirst("SELECT Manufacturer, Model, TotalPhysicalMemory FROM Win32_ComputerSystem");
         var processorRow = QueryFirst("SELECT Name, NumberOfCores, NumberOfLogicalProcessors, MaxClockSpeed FROM Win32_Processor");
         var gpuRows = QueryMany("SELECT Name, DriverVersion, AdapterRAM FROM Win32_VideoController");
+        var keyboardRows = QueryMany("SELECT Name, Description FROM Win32_Keyboard");
+        var mouseRows = QueryMany("SELECT Name, Description, NumberOfButtons FROM Win32_PointingDevice");
 
         var unknown = AppText.Get("CommonUnknown");
         var unavailable = AppText.Get("CommonUnavailable");
@@ -105,6 +107,20 @@ public sealed class SystemSnapshotService
             ? AppText.Get("NetworkNoActiveAdapter")
             : $"{activeInterfaces[0].Name} · {FormatLinkSpeed(activeInterfaces[0].Speed)}";
 
+        var keyboardNames = keyboardRows
+            .Select(row => Cleanup(row.TryGetValue("Name", out var name) ? name : row.TryGetValue("Description", out var description) ? description : string.Empty))
+            .Where(value => !string.IsNullOrWhiteSpace(value))
+            .Distinct()
+            .ToArray();
+
+        var mouseNames = mouseRows
+            .Select(row => Cleanup(row.TryGetValue("Name", out var name) ? name : row.TryGetValue("Description", out var description) ? description : string.Empty))
+            .Where(value => !string.IsNullOrWhiteSpace(value))
+            .Distinct()
+            .ToArray();
+
+        var inputSummary = $"{keyboardNames.Length} {AppText.Get("HardwareKeyboard")} / {mouseNames.Length} {AppText.Get("HardwareMouse")}";
+
         var cpuDetails = new List<DetailItem>
         {
             new() { Label = "Name", Value = processorName },
@@ -157,6 +173,34 @@ public sealed class SystemSnapshotService
                 };
             }).ToArray();
 
+        var inputDetails = new List<DetailItem>();
+        if (keyboardNames.Length == 0 && mouseNames.Length == 0)
+        {
+            inputDetails.Add(new DetailItem { Label = AppText.Get("HardwareInput"), Value = unavailable });
+        }
+        else
+        {
+            inputDetails.AddRange(keyboardNames.Select(name => new DetailItem
+            {
+                Label = AppText.Get("HardwareKeyboard"),
+                Value = name
+            }));
+
+            inputDetails.AddRange(mouseRows.Select(row =>
+            {
+                var mouseName = Cleanup(row.TryGetValue("Name", out var name) ? name : row.TryGetValue("Description", out var description) ? description : AppText.Get("HardwareMouse"));
+                var buttons = row.TryGetValue("NumberOfButtons", out var count) && int.TryParse(count, out var parsed)
+                    ? $" · {parsed} buttons"
+                    : string.Empty;
+
+                return new DetailItem
+                {
+                    Label = AppText.Get("HardwareMouse"),
+                    Value = $"{mouseName}{buttons}"
+                };
+            }));
+        }
+
         return new SystemSnapshot
         {
             DeviceName = deviceName,
@@ -169,12 +213,14 @@ public sealed class SystemSnapshotService
             MemoryUsagePercent = memoryUsagePercent,
             StorageSummary = storageSummary,
             NetworkSummary = networkSummary,
+            InputSummary = inputSummary,
             Drives = drives,
             CpuDetails = cpuDetails,
             GpuDetails = gpuDetails,
             MemoryDetails = memoryDetails,
             StorageDetails = storageDetails,
-            NetworkDetails = networkDetails
+            NetworkDetails = networkDetails,
+            InputDetails = inputDetails
         };
     }
 

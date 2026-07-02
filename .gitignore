@@ -34,7 +34,17 @@ coverage/
 
 # Logs
 *.log
+host_trace.txt
 
 # OS noise
 Thumbs.db
 Desktop.ini
+
+# Local verification artifacts
+optimizer-window*.png
+nav-*.png
+*-layout.png
+*-layout-v2.png
+*-layout-v3.png
+home-roglayout.png
+security-switches-final.png

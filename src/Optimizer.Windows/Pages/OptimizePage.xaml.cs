@@ -1,18 +1,22 @@
 using Microsoft.UI.Xaml.Controls;
-using Optimizer_Windows.Helpers;
+using Microsoft.UI;
+using Microsoft.UI.Xaml.Media;
+using Optimizer.Shared;
+using Optimizer.Shared.Models;
 using Optimizer_Windows.Localization;
 using Optimizer_Windows.Models;
 using Optimizer_Windows.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text.Json;
+using Windows.UI;
 
 namespace Optimizer_Windows.Pages;
 
 public sealed partial class OptimizePage : Page
 {
     private readonly FileSystemStatsService _fileSystemStatsService = FileSystemStatsService.Instance;
-
+    private readonly OptimizationStateService _optimizationStateService = OptimizationStateService.Instance;
     private readonly string _tempPath = Path.GetTempPath();
 
     public ObservableCollection<OptimizationOption> Options { get; } = [];
@@ -22,6 +26,7 @@ public sealed partial class OptimizePage : Page
         InitializeComponent();
         InitializeOptions();
         ApplyLocalization();
+        RefreshSelectedSummary();
     }
 
     private void InitializeOptions()
@@ -31,48 +36,43 @@ public sealed partial class OptimizePage : Page
             return;
         }
 
-        var safeBadge = AppText.Get("OptimizeBadgeSafe");
-
-        Options.Add(new OptimizationOption { ActionId = "storage-sense", Badge = safeBadge });
-        Options.Add(new OptimizationOption { ActionId = "disk-cleanup", Badge = safeBadge });
-        Options.Add(new OptimizationOption { ActionId = "temp-folder", Badge = safeBadge });
-        Options.Add(new OptimizationOption { ActionId = "startup-apps", Badge = safeBadge });
-        Options.Add(new OptimizationOption { ActionId = "task-manager", Badge = safeBadge });
-        Options.Add(new OptimizationOption { ActionId = "windows-update", Badge = safeBadge });
-        Options.Add(new OptimizationOption { ActionId = "power-settings", Badge = safeBadge });
+        Options.Add(new OptimizationOption { ActionId = "storage-sense" });
+        Options.Add(new OptimizationOption { ActionId = "disk-cleanup" });
+        Options.Add(new OptimizationOption { ActionId = "temp-folder" });
+        Options.Add(new OptimizationOption { ActionId = "startup-apps" });
+        Options.Add(new OptimizationOption { ActionId = "task-manager" });
+        Options.Add(new OptimizationOption { ActionId = "windows-update" });
+        Options.Add(new OptimizationOption { ActionId = "power-settings" });
 
         ApplyOptionLocalization();
+        ApplySavedSelection();
+    }
+
+    private void ApplySavedSelection()
+    {
+        var selectedIds = _optimizationStateService.GetSelectedActionIds();
+        foreach (var option in Options)
+        {
+            option.IsSelected = selectedIds.Contains(option.ActionId, StringComparer.OrdinalIgnoreCase);
+        }
     }
 
     private void ApplyLocalization()
     {
-        PageTitleText.Text = AppText.Get("NavOptimize");
-        PageSubtitleText.Text = AppText.Get("OptimizeSubtitle");
-        RefreshButton.Content = AppText.Get("Refresh");
         HeroEyebrowText.Text = AppText.Get("OptimizeHeroEyebrow");
-        HeroTitleText.Text = AppText.Get("OptimizeHeroTitle");
-        HeroBodyText.Text = AppText.Get("OptimizeHeroBody");
-        OpenSelectedButton.Content = AppText.Get("OptimizeOpenSelected");
-        ExportPlanButton.Content = AppText.Get("OptimizeExportPlan");
-        TempSnapshotTitleText.Text = AppText.Get("OptimizeTempTitle");
-        TempFilesLabelText.Text = AppText.Get("OptimizeFiles");
-        TempSizeLabelText.Text = AppText.Get("OptimizeSize");
-        OpenTempFolderButton.Content = AppText.Get("OptimizeOpenTemp");
-        ProfilesTitleText.Text = AppText.Get("OptimizeProfilesTitle");
-        ProfilesSubtitleText.Text = AppText.Get("OptimizeProfilesSubtitle");
-        BalancedPresetTitleText.Text = AppText.Get("OptimizePresetBalancedTitle");
-        BalancedPresetBodyText.Text = AppText.Get("OptimizePresetBalancedBody");
-        BalancedPresetButton.Content = AppText.Get("OptimizePresetBalancedAction");
-        StoragePresetTitleText.Text = AppText.Get("OptimizePresetStorageTitle");
-        StoragePresetBodyText.Text = AppText.Get("OptimizePresetStorageBody");
-        StoragePresetButton.Content = AppText.Get("OptimizePresetStorageAction");
-        StartupPresetTitleText.Text = AppText.Get("OptimizePresetStartupTitle");
-        StartupPresetBodyText.Text = AppText.Get("OptimizePresetStartupBody");
-        StartupPresetButton.Content = AppText.Get("OptimizePresetStartupAction");
         ChecklistTitleText.Text = AppText.Get("OptimizeChecklistTitle");
         ChecklistSubtitleText.Text = AppText.Get("OptimizeChecklistSubtitle");
+        SelectedTitleText.Text = AppText.Get("OptimizeSelectedTitle");
+        OutputTitleText.Text = AppText.Get("CommonOutput");
+        ActionsPanelTitleText.Text = AppText.Get("OptimizeActionDeckTitle");
+        ActionsPanelBodyText.Text = AppText.Get("OptimizeActionDeckBody");
+        BalancedPresetButton.Content = AppText.Get("OptimizePresetBalancedAction");
+        StoragePresetButton.Content = AppText.Get("OptimizePresetStorageAction");
+        StartupPresetButton.Content = AppText.Get("OptimizePresetStartupAction");
         SelectAllButton.Content = AppText.Get("OptimizeSelectAll");
         ClearSelectionButton.Content = AppText.Get("OptimizeClearSelection");
+        ExportPlanButton.Content = AppText.Get("OptimizeExportPlan");
+        OpenSelectedButton.Content = AppText.Get("OptimizeOpenSelected");
         ApplyOptionLocalization();
     }
 
@@ -97,69 +97,106 @@ public sealed partial class OptimizePage : Page
 
         option.Title = AppText.Get(titleKey);
         option.Description = AppText.Get(descriptionKey);
-        option.Badge = AppText.Get("OptimizeBadgeSafe");
+        ApplyRiskMetadata(option);
+    }
+
+    private void ApplyRiskMetadata(OptimizationOption option)
+    {
+        var operation = OperationCatalog.Find(option.ActionId);
+        if (operation is null)
+        {
+            option.Badge = AppText.Get("CommonUnknown");
+            return;
+        }
+
+        option.RiskLevel = operation.RiskLevel;
+        option.Badge = GetRiskLabel(operation.RiskLevel);
+
+        var palette = operation.RiskLevel switch
+        {
+            OperationRiskLevel.Low => (bg: Color.FromArgb(255, 13, 29, 20), border: Color.FromArgb(255, 42, 82, 58), fg: Color.FromArgb(255, 176, 255, 198)),
+            OperationRiskLevel.Medium => (bg: Color.FromArgb(255, 38, 25, 10), border: Color.FromArgb(255, 120, 78, 19), fg: Color.FromArgb(255, 255, 211, 140)),
+            OperationRiskLevel.High => (bg: Color.FromArgb(255, 42, 12, 16), border: Color.FromArgb(255, 138, 34, 47), fg: Color.FromArgb(255, 255, 180, 188)),
+            _ => (bg: Color.FromArgb(255, 24, 24, 24), border: Color.FromArgb(255, 64, 64, 64), fg: Color.FromArgb(255, 230, 230, 230))
+        };
+
+        option.BadgeBackground = new SolidColorBrush(palette.bg);
+        option.BadgeBorder = new SolidColorBrush(palette.border);
+        option.BadgeForeground = new SolidColorBrush(palette.fg);
+    }
+
+    private string GetRiskLabel(OperationRiskLevel riskLevel)
+    {
+        return riskLevel switch
+        {
+            OperationRiskLevel.Low => AppText.Get("SearchRiskLow"),
+            OperationRiskLevel.Medium => AppText.Get("SearchRiskMedium"),
+            OperationRiskLevel.High => AppText.Get("SearchRiskHigh"),
+            _ => AppText.Get("CommonUnknown")
+        };
     }
 
     private async void Page_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        await RefreshTempStatsAsync();
+        await UpdateOutputAsync();
     }
 
-    private async void RefreshButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-    {
-        await RefreshTempStatsAsync();
-    }
-
-    private async Task RefreshTempStatsAsync()
+    private async Task UpdateOutputAsync()
     {
         try
         {
-            LoadingRing.IsActive = true;
-            RefreshButton.IsEnabled = false;
-            StatusText.Text = AppText.Get("StatusScanningTemp");
-            TempPathText.Text = _tempPath;
-
             var stats = await _fileSystemStatsService.ScanDirectoryAsync(_tempPath);
-
-            TempFileCountText.Text = $"{stats.FileCount:N0}";
-            TempFolderSizeText.Text = FileSizeFormatter.Format(stats.TotalSizeBytes);
-            StatusText.Text = AppText.Format("StatusUpdated", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            OutputText.Text = $"{AppText.Get("OptimizeTempTitle")}: {stats.FileCount:N0} {AppText.Get("OptimizeFiles")} / {Helpers.FileSizeFormatter.Format(stats.TotalSizeBytes)}";
         }
         catch (Exception ex)
         {
-            StatusText.Text = AppText.Format("StatusScanFailed", ex.Message);
+            OutputText.Text = AppText.Format("StatusScanFailed", ex.Message);
         }
-        finally
+    }
+
+    private void OptionSelectionChanged(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        if (sender is CheckBox checkBox && checkBox.DataContext is OptimizationOption option)
         {
-            LoadingRing.IsActive = false;
-            RefreshButton.IsEnabled = true;
+            option.IsSelected = checkBox.IsChecked == true;
         }
+
+        RefreshSelectedSummary();
+    }
+
+    private void RefreshSelectedSummary()
+    {
+        var selected = Options.Where(item => item.IsSelected).ToArray();
+        _optimizationStateService.SetSelectedActionIds(selected.Select(item => item.ActionId));
+        SelectedItemsText.Text = selected.Length == 0
+            ? AppText.Get("StatusNoSelection")
+            : $"{AppText.Format("OptimizeSelectionCount", selected.Length)}{Environment.NewLine}{string.Join(Environment.NewLine, selected.Select(item => $"• {item.Title} · {item.Badge}"))}";
     }
 
     private void BalancedPresetButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        ApplyPreset("balanced", ["storage-sense", "startup-apps", "windows-update"]);
+        ApplyPreset(["storage-sense", "startup-apps", "windows-update"]);
     }
 
     private void StoragePresetButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        ApplyPreset("storage", ["storage-sense", "disk-cleanup", "temp-folder"]);
+        ApplyPreset(["storage-sense", "disk-cleanup", "temp-folder"]);
     }
 
     private void StartupPresetButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        ApplyPreset("startup", ["startup-apps", "task-manager", "power-settings"]);
+        ApplyPreset(["startup-apps", "task-manager", "power-settings"]);
     }
 
-    private void ApplyPreset(string presetName, IReadOnlyCollection<string> actionIds)
+    private void ApplyPreset(IReadOnlyCollection<string> actionIds)
     {
         foreach (var option in Options)
         {
             option.IsSelected = actionIds.Contains(option.ActionId);
         }
 
-        StatusText.Text = AppText.Format("StatusPresetApplied", AppText.Get($"OptimizePresetName{presetName[..1].ToUpperInvariant()}{presetName[1..]}"));
         RebindOptions();
+        RefreshSelectedSummary();
     }
 
     private void SelectAllButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -170,6 +207,7 @@ public sealed partial class OptimizePage : Page
         }
 
         RebindOptions();
+        RefreshSelectedSummary();
     }
 
     private void ClearSelectionButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -180,6 +218,7 @@ public sealed partial class OptimizePage : Page
         }
 
         RebindOptions();
+        RefreshSelectedSummary();
     }
 
     private void OpenSelectedButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -187,7 +226,7 @@ public sealed partial class OptimizePage : Page
         var selected = Options.Where(option => option.IsSelected).ToArray();
         if (selected.Length == 0)
         {
-            StatusText.Text = AppText.Get("StatusNoSelection");
+            OutputText.Text = AppText.Get("StatusNoSelection");
             return;
         }
 
@@ -196,7 +235,7 @@ public sealed partial class OptimizePage : Page
             OpenAction(option.ActionId);
         }
 
-        StatusText.Text = AppText.Format("StatusOpenedSelection", selected.Length);
+        OutputText.Text = AppText.Format("StatusOpenedSelection", selected.Length);
     }
 
     private async void ExportPlanButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -209,7 +248,8 @@ public sealed partial class OptimizePage : Page
                 {
                     option.ActionId,
                     option.Title,
-                    option.Description
+                    option.Description,
+                    RiskLevel = option.Badge
                 })
                 .ToArray();
 
@@ -221,17 +261,12 @@ public sealed partial class OptimizePage : Page
             var json = JsonSerializer.Serialize(selected, new JsonSerializerOptions { WriteIndented = true });
             await File.WriteAllTextAsync(exportPath, json);
 
-            StatusText.Text = AppText.Format("StatusPlanExported", exportPath);
+            OutputText.Text = AppText.Format("StatusPlanExported", exportPath);
         }
         catch (Exception ex)
         {
-            StatusText.Text = AppText.Format("StatusOpenFailed", ex.Message);
+            OutputText.Text = AppText.Format("StatusOpenFailed", ex.Message);
         }
-    }
-
-    private void OpenTempFolderButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-    {
-        Launch(_tempPath);
     }
 
     private void OpenAction(string actionId)
@@ -274,7 +309,7 @@ public sealed partial class OptimizePage : Page
         }
         catch (Exception ex)
         {
-            StatusText.Text = AppText.Format("StatusOpenFailed", ex.Message);
+            OutputText.Text = AppText.Format("StatusOpenFailed", ex.Message);
         }
     }
 
