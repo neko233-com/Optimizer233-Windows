@@ -9,18 +9,21 @@ on:
 permissions:
   contents: write
 
+env:
+  DOTNET_NOLOGO: true
+
 jobs:
   publish:
     runs-on: windows-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: 8.0.x
 
       - name: Package binary
         shell: pwsh
@@ -30,16 +33,29 @@ jobs:
           Copy-Item "dist/Optimizer233-Windows-$version-win11-x64.zip" "dist/Optimizer233-Windows-latest-win11-x64.zip" -Force
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: optimizer233-windows-win11-x64
           path: dist/*.zip
 
       - name: Publish GitHub release
         if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: dist/*.zip
-          generate_release_notes: true
-          draft: false
-          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $notesPath = Join-Path $env:RUNNER_TEMP "release-notes.md"
+          @"
+          ## Optimizer233-Windows $tag
+
+          Automated Win11 x64 binary release.
+          "@ | Set-Content -Path $notesPath -Encoding UTF8
+
+          gh release view $tag 1>$null 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload $tag dist/*.zip --clobber
+          }
+          else {
+            gh release create $tag dist/*.zip --title $tag --notes-file $notesPath --latest
+          }
